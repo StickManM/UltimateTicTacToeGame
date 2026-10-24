@@ -12,8 +12,10 @@ public class UltimateTicTacToeGUI {
     private static JButton[][][][] buttons;
 
     public static void createAndShowGUI() {
+        //Initialization of the game
         game = new UltimateTicTacToeGame();
 
+        //Main Frame for GUI
         JFrame frame = new JFrame("Ultimate Tic Tac Toe");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 750);
@@ -76,7 +78,6 @@ public class UltimateTicTacToeGUI {
 
     private static void handleCellClick(int bigRow, int bigCol, int smallRow, int smallCol) {
         String currentPlayer = isXTurn ? " X " : " O ";
-        String playerSymbol = isXTurn ? "X" : "O";
 
         //Convert UI indices (0-2) into backend row/column (1-9)
         int targetRow = (bigRow * 3) + smallRow + 1;
@@ -112,15 +113,25 @@ public class UltimateTicTacToeGUI {
         game.setBoard(gameBoardArr);
 
         //Update UI Button Text
-        buttons[bigRow][bigCol][smallRow][smallCol].setText(playerSymbol);
+        if (currentPlayer.equals(" X ")) {
+            buttons[bigRow][bigCol][smallRow][smallCol].setForeground(Color.RED);
+        } else {
+            buttons[bigRow][bigCol][smallRow][smallCol].setForeground(Color.BLUE);
+        }
+        buttons[bigRow][bigCol][smallRow][smallCol].setText(currentPlayer);
+
+
 
         //Check if this move wins the local sub-box
         if (game.isBoxWinner(currentPlayer, currentBoxNum)) {
-            statusLabel.setText(playerSymbol + " won Box #" + currentBoxNum + "!");
+            statusLabel.setText(currentPlayer + " won Box #" + currentBoxNum + "!");
 
             if (game.isWinner(currentPlayer)) {
-                JOptionPane.showMessageDialog(null, playerSymbol + " HAS WON THE ULTIMATE GAME!");
+                refreshBoardHighlights();
+
+                JOptionPane.showMessageDialog(null, "PLAYER" + currentPlayer + "HAS WON THE ULTIMATE GAME!");
                 System.exit(0);
+
             }
         }
 
